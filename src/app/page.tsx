@@ -19,12 +19,16 @@ export default function Home() {
         {messages.map((message) => (
           <div key={message.id}>
             <strong>{message.role === "user" ? "You" : "Claude"}:</strong>{" "}
-            {message.parts.map((part, i) =>
-              part.type === "text" ? 
-                <span key={i}>
+            {message.parts.map((part, i) => {
+              if (part.type !== "text") return null;
+              return (
+                message.role === "assistant" ?
+                 <div key={i} className="prose prose-invert max-w-none inline">
                   <ReactMarkdown>{part.text}</ReactMarkdown>
-                </span> : null
-            )}
+                 </div> : 
+                <span key={i}>{part.text}</span>
+              )
+            })}
           </div>
         ))}
       </div>
