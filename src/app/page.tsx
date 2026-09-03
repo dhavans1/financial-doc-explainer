@@ -7,6 +7,7 @@ import ReactMarkdown from "react-markdown";
 
 export default function Home() {
   const [input, setInput] = useState("");
+  const [fileList, setFileList] = useState<FileList | undefined>(undefined);
   const { messages, sendMessage, status, error } = useChat({
     transport: new DefaultChatTransport({ api: "/api/chat" })
   });
@@ -42,21 +43,62 @@ export default function Home() {
         </div>
       )}
 
+
+      {/* Uploaded files */}
+      <div>
+        {
+          fileList && fileList.length > 0 && (
+            <div className="flex flex-row gap-2">
+              <span>📎</span>
+              <span>{fileList[0].name}</span>
+              <button
+                id="clear-file"
+                type="button"
+                onClick={() => setFileList(undefined)}
+                className="cursor-pointer"
+                aria-label="Remove uploaded document"
+              >
+                🗑️
+              </button>
+            </div>
+          )
+        }
+      </div>
+
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (input.trim() === "") return;
-          sendMessage({ text: input });
+          if (input.trim() === "" && !fileList) return;
+          sendMessage({ text: input , files: fileList });
           setInput("");
+          setFileList(undefined);
         }}
         className="flex gap-2"
       >
+        {/* File upload */}
+        <input 
+          id="file-upload"
+          className="hidden"
+          type="file"
+          accept=".pdf"
+          onChange={(e) => setFileList(e.target.files ?? undefined)}
+        />
+        <label
+          htmlFor="file-upload"
+          className="cursor-pointer flex items-center justify-center"
+          aria-label="Attach a financial document"
+        >
+          📎
+        </label>
+
+        {/* Text input */}
         <input
           className="border rounded px-3 py-2 flex-1"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask about financial documents..."
         />
+
         <button
           type="submit"
           disabled={status !== "ready"}
