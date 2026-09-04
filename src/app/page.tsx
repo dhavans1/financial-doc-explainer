@@ -102,7 +102,7 @@ export default function Home() {
         <button
           type="submit"
           disabled={status !== "ready"}
-          className="bg-black text-white px-4 py-2 rounded disabled:opacity-50"
+          className="bg-black text-white px-4 py-2 rounded disabled:opacity-50 hover:cursor-pointer hover:bg-gray-800"
         >
           Send
         </button>
