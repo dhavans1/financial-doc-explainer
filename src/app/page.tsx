@@ -2,7 +2,7 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 
 export default function Home() {
@@ -13,13 +13,40 @@ export default function Home() {
   });
   const userInputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const [showScrollDown, setShowScrollDown] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      const distanceFromBottom =
+        document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+      setShowScrollDown(distanceFromBottom > 200);
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    const observer = new ResizeObserver(check);
+    observer.observe(document.body);
+    return () => {
+      window.removeEventListener("scroll", check);
+      observer.disconnect();
+    };
+  }, []);
+
+  const scrollToBottom = () => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
+  };
 
   return (
     <main className="w-full max-w-2xl min-h-screen mx-auto flex flex-col gap-4 bg-linear-0 from-blue-400 
       via-blue-200 to-blue-400">
-      <div className="w-full max-w-2xl left-0 right-0 mx-auto text-xl font-semibold text-center h-30 
+      <div className="w-full max-w-2xl left-0 right-0 mx-auto text-xl font-semibold text-center text-white h-30 
         bg-blue-950 flex items-center justify-center border-blue-950 bg-linear-to-b from-blue-950 
-        to-blue-800 sticky top-0 z-10">
+        to-blue-600 sticky top-0 z-10">
         <h1>Doc Explainer</h1>
       </div>
 
@@ -44,7 +71,7 @@ export default function Home() {
                 )
               else if (part.type === "file")
                 return (
-                  <div key={i} className="gap-2 bg-blue-900 w-fit ml-auto m-2 mr-0 p-1 pl-3 pr-3 border-blue-900 
+                  <div key={i} className="gap-2 bg-blue-900 w-fit max-w-3/4 ml-auto m-2 mr-0 p-1 pl-3 pr-3 border-blue-900 
                     rounded-xl text-white">
                     <span aria-label="file attachment icon">📎</span>&nbsp;
                     <span aria-label={`Attached file: ${part.filename}`}>{part.filename}</span>
@@ -72,12 +99,24 @@ export default function Home() {
       )}
 
       <div className="sticky bottom-0 z-10 mt-auto">
-      
+        {/* Scroll down button */}
+        {showScrollDown && (
+          <button
+            type="button"
+            onClick={scrollToBottom}
+            aria-label="Scroll to latest message"
+            className="flex items-center justify-center h-10 w-10 mb-1 mr-6 ml-auto rounded-full bg-blue-950 text-white
+              hover:bg-blue-900 cursor-pointer focus-visible:ring-2 focus-visible:ring-white backdrop-blur"
+          >
+            <span aria-hidden="true">↓</span>
+          </button>
+        )}
+
         {/* Uploaded files */}
-        <div className="z-10 pr-6 mb-1">
+        <div className="z-10 pr-6 mb-1 w-3/4 max-w-3/4 ml-auto flex">
           {
             fileList && fileList.length > 0 && (
-              <div className="flex flex-row gap-2 bg-blue-950/80 backdrop-blur p-2 rounded-lg border border-blue-900 w-fit ml-auto ">
+              <div className="flex flex-row gap-2 bg-blue-950/80 backdrop-blur p-2 rounded-lg border border-blue-900 w-full ml-auto ">
                 <span aria-label="file attachment icon">📎</span>
                 <span aria-label={`Attached file: ${fileList[0].name}`}>{fileList[0].name}</span>
                 <button
@@ -108,6 +147,7 @@ export default function Home() {
             if(fileInputRef.current) fileInputRef.current.value = ""
           }}
           className="w-full flex gap-2 p-6 items-end max-w-2xl bg-blue-950/80 backdrop-blur"
+          ref={formRef}
         >
           {/* File upload */}
           <input 
@@ -131,11 +171,18 @@ export default function Home() {
           <textarea
             id="user-input-textarea"
             ref={userInputRef}
-            className="w-full resize-none overflow-hidden rounded-lg border border-gray-300 bg-blue-100 text-black 
+            className="w-full resize-none overflow-hidden rounded-lg border border-gray-300 bg-blue-50 text-black 
               p-3 text-sm focus:border-blue-500 focus:outline-none field-sizing-content min-h-10"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about financial documents..."
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+                e.preventDefault();
+                formRef.current?.requestSubmit();
+              }
+            }}
+            aria-describedby="textarea-description"
           />
 
           <button
@@ -148,6 +195,10 @@ export default function Home() {
             Send
           </button>
         </form>
+
+        <span className="sr-only" id="textarea-description">
+          Press Enter to send. Press Shift and Enter for a new line.
+        </span>
       </div>
     </main>
   );
