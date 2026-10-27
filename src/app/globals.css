@@ -20,6 +20,23 @@
   }
 }
 
+/* Chat bubble prose: white text and markers on dark blue bubbles */
+.prose-chat {
+  --tw-prose-invert-body: #fff;
+  --tw-prose-invert-headings: #fff;
+  --tw-prose-invert-lead: #fff;
+  --tw-prose-invert-bold: #fff;
+  --tw-prose-invert-counters: #fff;
+  --tw-prose-invert-bullets: #fff;
+  --tw-prose-invert-quotes: #fff;
+  --tw-prose-invert-captions: #fff;
+  --tw-prose-invert-code: #fff;
+  --tw-prose-invert-hr: rgb(255 255 255 / 0.3);
+  --tw-prose-invert-quote-borders: rgb(255 255 255 / 0.3);
+  --tw-prose-invert-th-borders: rgb(255 255 255 / 0.3);
+  --tw-prose-invert-td-borders: rgb(255 255 255 / 0.2);
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
