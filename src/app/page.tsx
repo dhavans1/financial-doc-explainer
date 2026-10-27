@@ -9,13 +9,19 @@ export default function Home() {
   const [input, setInput] = useState("");
   const [fileList, setFileList] = useState<FileList | undefined>(undefined);
   const { messages, sendMessage, status, error, clearError } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" })
+    transport: new DefaultChatTransport({ api: "/api/chat" }),
+    onFinish: ({ message }) => {
+      setAnnouncement(
+        message.parts.filter(p => p.type === "text").map(p => p.text).join(" ")
+      );
+    },
   });
   const userInputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   const [showScrollDown, setShowScrollDown] = useState(false);
+  const [announcement, setAnnouncement] = useState("");
 
   useEffect(() => {
     const check = () => {
@@ -79,10 +85,14 @@ export default function Home() {
                 )
               else if (part.type === "file")
                 return (
-                  <div key={i} className="gap-2 bg-blue-900 w-fit max-w-[85%] sm:max-w-3/4 ml-auto m-2 mr-0 p-1 pl-3 pr-3 border-blue-900 
-                    rounded-xl text-white">
-                    <span aria-label="file attachment icon">📎</span>&nbsp;
-                    <span aria-label={`Attached file: ${part.filename}`}>{part.filename}</span>
+                  <div key={i} 
+                    className="gap-2 bg-blue-900 w-fit max-w-[85%] sm:max-w-3/4 
+                    ml-auto m-2 mr-0 p-1 pl-3 pr-3 border-blue-900 rounded-xl text-white"
+                    role="img"
+                    aria-label={`Attached file: ${part.filename}`}
+                  >
+                    <span>📎</span>&nbsp;
+                    <span>{part.filename}</span>
                   </div>
                 )
             })}
@@ -125,8 +135,8 @@ export default function Home() {
           {
             fileList && fileList.length > 0 && (
               <div className="flex flex-row gap-2 bg-blue-950/80 backdrop-blur p-2 rounded-lg border border-blue-900 w-full ml-auto ">
-                <span aria-label="file attachment icon">📎</span>
-                <span aria-label={`Attached file: ${fileList[0].name}`}>{fileList[0].name}</span>
+                <span aria-hidden="true">📎</span>
+                <span><span className="sr-only">Attached file: </span>{fileList[0].name}</span>
                 <button
                   id="clear-file"
                   type="button"
@@ -217,6 +227,10 @@ export default function Home() {
         <span className="sr-only" id="textarea-description">
           Press Enter to send. Press Shift and Enter for a new line.
         </span>
+      </div>
+
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {announcement}
       </div>
     </main>
   );
