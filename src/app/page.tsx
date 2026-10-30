@@ -47,6 +47,10 @@ export default function Home() {
     });
   };
 
+  const isNotProcessing = status === "ready" || status === "error";
+  const isValidInputPresent = input.trim() !== "" || (fileList && fileList.length > 0);
+  const canSend = isValidInputPresent && isNotProcessing;
+
   return (
     <main className="w-full max-w-2xl min-h-screen mx-auto flex flex-col gap-4 bg-linear-0 from-blue-400 
       via-blue-200 to-blue-400">
@@ -77,6 +81,7 @@ export default function Home() {
                   ">
                     <ReactMarkdown>{part.text}</ReactMarkdown>
                   </div> : 
+                  part.text.trim() !== "" &&
                   <p key={i} className="
                     w-fit max-w-[85%] sm:max-w-3/4 ml-auto bg-blue-200 p-2 border border-blue-900 rounded-2xl 
                     rounded-br-none bg-linear-to-r/oklch from-blue-900 to-blue-800 break-words">
@@ -159,7 +164,7 @@ export default function Home() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              if (input.trim() === "" && !fileList) return;
+              if (!canSend) return;
               sendMessage({ text: input , files: fileList });
               setInput("");
               setFileList(undefined);
@@ -201,6 +206,7 @@ export default function Home() {
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
                   e.preventDefault();
+                  if (!canSend) return;
                   formRef.current?.requestSubmit();
                 }
               }}
@@ -210,9 +216,9 @@ export default function Home() {
             <button
               id="send-btn"
               type="submit"
-              disabled={status !== "ready" && status !== "error"}
-              className="bg-blue-950 text-white px-4 py-2 rounded-2xl disabled:opacity-50 hover:cursor-pointer 
-                hover:bg-blue-900 h-10"
+              disabled={!canSend}
+              className="bg-blue-950 text-white px-4 py-2 rounded-2xl disabled:opacity-50 enabled:hover:cursor-pointer 
+                enabled:hover:bg-blue-900 h-10"
             >
               Send
             </button>
