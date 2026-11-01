@@ -165,7 +165,16 @@ export default function Home() {
             onSubmit={(e) => {
               e.preventDefault();
               if (!canSend) return;
-              sendMessage({ text: input , files: fileList });
+
+              const text = input.trim();
+              const files = fileList && fileList.length > 0 ? fileList : undefined;
+              if (text && files) {
+                sendMessage({ text: text, files: files });
+              } else if (text) {
+                sendMessage({ text: text });
+              } else if (files) {
+                sendMessage({ files: files });
+              }
               setInput("");
               setFileList(undefined);
               if(fileInputRef.current) fileInputRef.current.value = ""
@@ -199,7 +208,7 @@ export default function Home() {
               id="user-input-textarea"
               ref={userInputRef}
               className="w-full resize-none overflow-hidden rounded-lg border border-gray-300 bg-blue-50 text-black 
-                p-3 text-sm focus:border-blue-500 focus:outline-none field-sizing-content min-h-10"
+                p-3 text-xs sm:text-sm focus:border-blue-500 focus:outline-none field-sizing-content min-h-10"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask about financial documents..."
