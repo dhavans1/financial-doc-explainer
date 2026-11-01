@@ -3,6 +3,7 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useState, useRef, useEffect } from "react";
+import { FaChevronDown } from "react-icons/fa6";
 import { RiAttachment2, RiDeleteBinLine } from "react-icons/ri";
 import ReactMarkdown from "react-markdown";
 
@@ -92,7 +93,7 @@ export default function Home() {
               else if (part.type === "file")
                 return (
                   <div key={i} 
-                    className="gap-2 bg-blue-900 w-fit max-w-[85%] sm:max-w-3/4 
+                    className="flex flex-row items-center bg-blue-900 w-fit max-w-[85%] sm:max-w-3/4 
                     ml-auto m-2 mr-0 p-1 pl-3 pr-3 border-blue-900 rounded-xl text-white"
                     role="img"
                     aria-label={`Attached file: ${part.filename}`}
@@ -132,7 +133,7 @@ export default function Home() {
             className="flex items-center justify-center h-10 w-10 mb-1 mr-6 ml-auto rounded-full bg-blue-950 text-white
               hover:bg-blue-900 cursor-pointer focus-visible:ring-2 focus-visible:ring-white backdrop-blur"
           >
-            <span aria-hidden="true">↓</span>
+            <FaChevronDown aria-hidden="true" />
           </button>
         )}
 
