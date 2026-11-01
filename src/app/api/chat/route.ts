@@ -10,7 +10,17 @@ const SYSTEM_PROMPT = fs.readFileSync(
 );
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return Response.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const messages = (body as { messages?: UIMessage[] })?.messages;
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return Response.json({ error: "messages must be a non-empty array" }, { status: 400 });
+  }
 
   const result = streamText({
     model: anthropic("claude-sonnet-5"),
