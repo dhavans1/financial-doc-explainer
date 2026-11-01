@@ -45,11 +45,16 @@ Financial document format: PDF only (32MB / 100 pages, Anthropic limits), images
 https://github.com/dhavans1/financial-doc-explainer.git
 
 2. Install dependencies:
-```npm install```
+```
+npm install
+```
 
 3. Add anthropic API key:
 Create .env.local file under root folder [ financial-doc-explainer/.env.local ]. 
-Add the API KEY entry in .env.local file and replace YOUR_API_KEY with actual API key ```ANTHROPIC_API_KEY=YOUR_API_KEY```
+Add the API KEY entry in .env.local file and replace YOUR_API_KEY with actual API key.
+```
+ANTHROPIC_API_KEY=YOUR_API_KEY
+```
 
 4. Run one of the appropriate below commands to start the local build
 ```bash
