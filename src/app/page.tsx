@@ -3,6 +3,7 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useState, useRef, useEffect } from "react";
+import { RiAttachment2, RiDeleteBinLine } from "react-icons/ri";
 import ReactMarkdown from "react-markdown";
 
 export default function Home() {
@@ -96,7 +97,7 @@ export default function Home() {
                     role="img"
                     aria-label={`Attached file: ${part.filename}`}
                   >
-                    <span>📎</span>&nbsp;
+                    <span><RiAttachment2 aria-hidden="true" /></span>&nbsp;
                     <span>{part.filename}</span>
                   </div>
                 )
@@ -139,8 +140,10 @@ export default function Home() {
         <div className="z-10 pr-6 mb-1 max-w-[85%] sm:max-w-3/4 ml-auto flex">
           {
             fileList && fileList.length > 0 && (
-              <div className="flex flex-row gap-2 bg-blue-950/80 backdrop-blur p-2 rounded-lg border border-blue-900 w-full ml-auto ">
-                <span aria-hidden="true">📎</span>
+              <div className="flex flex-row items-center gap-2 bg-blue-950/80 backdrop-blur p-2 rounded-lg border border-blue-900 ml-auto">
+                <span>
+                  <RiAttachment2 aria-hidden="true" />
+                </span>
                 <span><span className="sr-only">Attached file: </span>{fileList[0].name}</span>
                 <button
                   id="clear-file"
@@ -153,7 +156,7 @@ export default function Home() {
                   className="cursor-pointer"
                   aria-label="Remove uploaded document"
                 >
-                  🗑️
+                  <RiDeleteBinLine aria-hidden="true" />
                 </button>
               </div>
             )
@@ -197,7 +200,7 @@ export default function Home() {
               className="cursor-pointer flex items-center justify-center bg-blue-950 h-10 w-10 rounded-full shrink-0
               peer-focus-visible:ring-2 peer-focus-visible:ring-white"
             >
-              📎
+              <RiAttachment2 aria-hidden="true" />
             </label>
 
             {/* Text input */}
