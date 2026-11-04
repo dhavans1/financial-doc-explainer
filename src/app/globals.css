@@ -1,7 +1,9 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* The app uses a fixed palette, so opt out of dark mode, including forced darkening in webviews. */
 :root {
+  color-scheme: only light;
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -11,13 +13,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 /* Chat bubble prose: white text and markers on dark blue bubbles */
