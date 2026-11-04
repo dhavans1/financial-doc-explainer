@@ -13,8 +13,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://financial-doc-explainer.vercel.app"),
   title: "Financial Doc Explainer",
-  description: "Explains financial documents in plain language",
+  description:
+    "Upload a loan agreement, credit card statement, or benefit notice and get a plain-language summary flagging fees, rate changes, and risk clauses.",
+  openGraph: {
+    title: "Financial Doc Explainer",
+    description:
+      "Plain-language summaries of financial documents — fees, rate changes, and risk clauses.",
+    url: "https://financial-doc-explainer.vercel.app",
+    siteName: "Financial Doc Explainer",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Financial Doc Explainer",
+    description:
+      "Plain-language summaries of financial documents — fees, rate changes, and risk clauses.",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
