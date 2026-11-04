@@ -60,7 +60,7 @@ export default function Home() {
         bg-blue-950 flex flex-col items-center justify-center border-blue-950 bg-linear-to-b from-blue-950 
         to-blue-600 sticky top-0 z-10">
         <h1 className="text-xl font-semibold">Doc Explainer</h1>
-        <p className="text-sm font-normal text-white/80 pt-2">
+        <p className="text-sm font-normal text-white pt-2">
           Ask questions about financial documents - loan agreement, credit card statement, or benefit notice
         </p>
         {/* Disclaimer: For screen reader users only */}
@@ -86,7 +86,7 @@ export default function Home() {
                   part.text.trim() !== "" &&
                   <p key={i} className="
                     w-fit max-w-[85%] sm:max-w-3/4 ml-auto bg-blue-200 p-2 border border-blue-900 rounded-2xl 
-                    rounded-br-none bg-linear-to-r/oklch from-blue-900 to-blue-800 break-words">
+                    rounded-br-none bg-linear-to-r/oklch from-blue-900 to-blue-800 text-white break-words">
                     {part.text}
                   </p>
                 )
@@ -123,7 +123,7 @@ export default function Home() {
         </div>
       )}
 
-      <div className="sticky bottom-0 z-10 mt-auto">
+      <div className="sticky bottom-0 z-10 mt-auto text-white">
         {/* Scroll down button */}
         {showScrollDown && (
           <button
@@ -238,7 +238,7 @@ export default function Home() {
           </form>
 
           {/* Disclaimer: For non-screen reader users only */}
-          <p className="text-xs text-center text-white/80 px-6 pb-6" aria-hidden="true">
+          <p className="text-xs text-center text-white px-6 pb-6" aria-hidden="true">
             Not a financial advisor — this tool explains document content only.
           </p>
         </div>
